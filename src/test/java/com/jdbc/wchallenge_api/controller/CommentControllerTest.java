@@ -12,7 +12,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
  * @version 1.0
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CommentControllerTest {
+class CommentControllerTest {
 
   @LocalServerPort
   private int port;

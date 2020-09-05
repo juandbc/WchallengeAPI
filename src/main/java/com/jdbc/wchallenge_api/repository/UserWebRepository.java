@@ -20,15 +20,13 @@ public class UserWebRepository implements UserRepository {
 
   private final WebClient webClient;
 
-  private static final String PATH = "/users";
-
-  public UserWebRepository(@Value("${webServiceRepository}") String baseUrl) {
-    this.webClient = WebClient.create(baseUrl);
+  public UserWebRepository(@Value("${webServiceRepository}") String baseUrl, @Value("${usersPath}") String path) {
+    this.webClient = WebClient.create(baseUrl + path);
   }
 
   @Override
   public List<User> findAll() {
-    Flux<User> result = webClient.get().uri(PATH).header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+    Flux<User> result = webClient.get().header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
             .retrieve()
             .bodyToFlux(User.class);
     return result.collectList().block();
@@ -36,7 +34,7 @@ public class UserWebRepository implements UserRepository {
 
   @Override
   public User findById(int id) {
-    Mono<User> result = webClient.get().uri(PATH + "/{id}", id)
+    Mono<User> result = webClient.get().uri("/{id}", id)
             .retrieve()
             .bodyToMono(User.class);
     return result.block();

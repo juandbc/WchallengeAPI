@@ -1,8 +1,9 @@
 package com.jdbc.wchallenge_api.service;
 
+import com.jdbc.wchallenge_api.model.Comment;
+import com.jdbc.wchallenge_api.model.Photo;
 import com.jdbc.wchallenge_api.model.User;
-import com.jdbc.wchallenge_api.repository.UserWebRepository;
-import org.junit.jupiter.api.BeforeEach;
+import com.jdbc.wchallenge_api.repository.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @ExtendWith(SpringExtension.class)
 @TestPropertySource("classpath:application.properties")
-@ContextConfiguration(classes = {UserService.class, UserWebRepository.class})
+@ContextConfiguration(classes = {UserService.class, AlbumService.class, CommentService.class, PostService.class, PhotoService.class,
+        AlbumWebRepository.class, CommentRepository.class,
+        PostWebRepository.class, PhotoWebRepository.class, UserWebRepository.class})
 class UserServiceTest {
 
   @Autowired
@@ -46,5 +49,23 @@ class UserServiceTest {
 
     assertThat(actualUser).isNotNull().isEqualToComparingOnlyGivenFields(expectedUser
             , "name", "username", "id");
+  }
+
+  @Test
+  void findUserComments() {
+    assertThat(this.userService.findUserComments(5))
+            .isNotNull()
+            .isNotEmpty()
+            .hasOnlyElementsOfType(Comment.class)
+            .hasSizeGreaterThan(49);
+  }
+
+  @Test
+  void findUserPhotos() {
+    assertThat(this.userService.findUserPhotos(2))
+            .isNotNull()
+            .isNotEmpty()
+            .hasOnlyElementsOfType(Photo.class)
+            .hasSizeGreaterThan(50);
   }
 }

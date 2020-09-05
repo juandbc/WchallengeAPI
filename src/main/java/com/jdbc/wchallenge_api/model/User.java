@@ -190,11 +190,11 @@ public class User implements Serializable {
     public boolean equals(Object o) {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
-      Address address = (Address) o;
-      return street.equals(address.street) &&
-              suite.equals(address.suite) &&
-              city.equals(address.city) &&
-              zipcode.equals(address.zipcode);
+      Address oAddress = (Address) o;
+      return street.equals(oAddress.street) &&
+              suite.equals(oAddress.suite) &&
+              city.equals(oAddress.city) &&
+              zipcode.equals(oAddress.zipcode);
     }
 
     @Override
@@ -294,10 +294,10 @@ public class User implements Serializable {
     public boolean equals(Object o) {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
-      Company company = (Company) o;
-      return name.equals(company.name) &&
-              catchPhrase.equals(company.catchPhrase) &&
-              bs.equals(company.bs);
+      Company oCompany = (Company) o;
+      return name.equals(oCompany.name) &&
+              catchPhrase.equals(oCompany.catchPhrase) &&
+              bs.equals(oCompany.bs);
     }
 
     @Override

@@ -15,23 +15,22 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @ExtendWith(SpringExtension.class)
 @TestPropertySource(locations = "classpath:application.properties")
-@ContextConfiguration(classes = PhotoWebRepository.class)
-class PhotoRepositoryTest {
+@ContextConfiguration(classes = PostWebRepository.class)
+class PostRepositoryTest {
 
   @Autowired
-  private PhotoWebRepository photoWebRepository;
+  private PostWebRepository postWebRepository;
 
   @Test
   void findAllUsers() {
-    assertThat(this.photoWebRepository.findAll())
-            .isNotNull()
+    assertThat(this.postWebRepository.findAll()).isNotNull()
             .isNotEmpty()
             .hasSizeGreaterThan(50);
   }
 
   @Test
   void findUserById() {
-    assertThat(this.photoWebRepository.findById(80))
+    assertThat(this.postWebRepository.findById(80))
             .isNotNull()
             .hasNoNullFieldsOrProperties();
   }

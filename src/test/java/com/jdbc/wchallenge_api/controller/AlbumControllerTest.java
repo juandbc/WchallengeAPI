@@ -12,7 +12,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
  * @version 1.0
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AlbumControllerTest {
+class AlbumControllerTest {
 
   @LocalServerPort
   private int port;

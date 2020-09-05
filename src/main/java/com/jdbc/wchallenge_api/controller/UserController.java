@@ -1,6 +1,8 @@
 package com.jdbc.wchallenge_api.controller;
 
 import com.jdbc.wchallenge_api.model.Album;
+import com.jdbc.wchallenge_api.model.Comment;
+import com.jdbc.wchallenge_api.model.Photo;
 import com.jdbc.wchallenge_api.model.User;
 import com.jdbc.wchallenge_api.service.AlbumService;
 import com.jdbc.wchallenge_api.service.UserService;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -42,5 +45,21 @@ public class UserController {
   @GetMapping("/{id}/albums")
   public List<Album> findUserAlbums(@PathVariable int id) {
     return albumService.findByUser(id);
+  }
+
+  @GetMapping("/{id}/comments")
+  public List<Comment> findUserComments(@PathVariable String id) {
+    if (id != null && !id.isEmpty())
+      return userService.findUserComments(Integer.parseInt(id));
+    else
+      return Collections.emptyList();
+  }
+
+  @GetMapping("/{id}/photos")
+  public List<Photo> findUserPhotos(@PathVariable String id) {
+    if (id != null && !id.isEmpty())
+      return userService.findUserPhotos(Integer.parseInt(id));
+    else
+      return Collections.emptyList();
   }
 }
