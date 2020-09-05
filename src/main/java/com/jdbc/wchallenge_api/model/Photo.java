@@ -14,14 +14,16 @@ public class Photo implements Serializable {
   private String title;
   private String url;
   private String thumbnailUrl;
+  private int albumId;
 
   public Photo() {}
 
-  public Photo(int id, String title, String url, String thumbnailUrl) {
+  public Photo(int id, String title, String url, String thumbnailUrl, int albumId) {
     this.id = id;
     this.title = title;
     this.url = url;
     this.thumbnailUrl = thumbnailUrl;
+    this.albumId = albumId;
   }
 
   public int getId() {
@@ -56,20 +58,29 @@ public class Photo implements Serializable {
     this.thumbnailUrl = thumbnailUrl;
   }
 
+  public int getAlbumId() {
+    return albumId;
+  }
+
+  public void setAlbumId(int albumId) {
+    this.albumId = albumId;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Photo photo = (Photo) o;
     return id == photo.id &&
+            albumId == photo.albumId &&
             title.equals(photo.title) &&
-            url.equals(photo.url) &&
-            thumbnailUrl.equals(photo.thumbnailUrl);
+            Objects.equals(url, photo.url) &&
+            Objects.equals(thumbnailUrl, photo.thumbnailUrl);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, title, url, thumbnailUrl);
+    return Objects.hash(id, title, url, thumbnailUrl, albumId);
   }
 
   @Override
@@ -79,6 +90,7 @@ public class Photo implements Serializable {
             ", title='" + title + '\'' +
             ", url='" + url + '\'' +
             ", thumbnailUrl='" + thumbnailUrl + '\'' +
+            ", albumId=" + albumId +
             '}';
   }
 }

@@ -1,7 +1,6 @@
 package com.jdbc.wchallenge_api.model;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -13,14 +12,14 @@ public class Album implements Serializable {
   private static final long serialVersionUID = 2709850512506941409L;
   private int id;
   private String title;
-  private List<Photo> photos;
+  private int userId;
 
   public Album() {}
 
-  public Album(int id, String title, List<Photo> photos) {
+  public Album(int id, String title, int userId) {
     this.id = id;
     this.title = title;
-    this.photos = photos;
+    this.userId = userId;
   }
 
   public int getId() {
@@ -39,12 +38,8 @@ public class Album implements Serializable {
     this.title = title;
   }
 
-  public List<Photo> getPhotos() {
-    return photos;
-  }
-
-  public void setPhotos(List<Photo> photos) {
-    this.photos = photos;
+  public int getUserId() {
+    return userId;
   }
 
   @Override
@@ -52,14 +47,18 @@ public class Album implements Serializable {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Album album = (Album) o;
-    return getId() == album.getId() &&
-            getTitle().equals(album.getTitle()) &&
-            Objects.equals(getPhotos(), album.getPhotos());
+    return id == album.id &&
+            userId == album.userId &&
+            title.equals(album.title);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getId(), getTitle(), getPhotos());
+    return Objects.hash(id, title, userId);
+  }
+
+  public void setUserId(int userId) {
+    this.userId = userId;
   }
 
   @Override
@@ -67,7 +66,7 @@ public class Album implements Serializable {
     return "Album{" +
             "id=" + id +
             ", title='" + title + '\'' +
-            ", photos=" + photos +
+            ", userId=" + userId +
             '}';
   }
 }

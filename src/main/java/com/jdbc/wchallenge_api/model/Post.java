@@ -1,7 +1,6 @@
 package com.jdbc.wchallenge_api.model;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -14,15 +13,15 @@ public class Post implements Serializable {
   private int id;
   private String title;
   private String body;
-  private List<Comment> comments;
+  private int userId;
 
   public Post() {}
 
-  public Post(int id, String title, String body, List<Comment> comments) {
+  public Post(int id, String title, String body, int userId) {
     this.id = id;
     this.title = title;
     this.body = body;
-    this.comments = comments;
+    this.userId = userId;
   }
 
   public int getId() {
@@ -49,12 +48,12 @@ public class Post implements Serializable {
     this.body = body;
   }
 
-  public List<Comment> getComments() {
-    return comments;
+  public int getUserId() {
+    return userId;
   }
 
-  public void setComments(List<Comment> comments) {
-    this.comments = comments;
+  public void setUserId(int userId) {
+    this.userId = userId;
   }
 
   @Override
@@ -65,12 +64,12 @@ public class Post implements Serializable {
     return id == post.id &&
             title.equals(post.title) &&
             body.equals(post.body) &&
-            Objects.equals(comments, post.comments);
+            Objects.equals(userId, post.userId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, title, body, comments);
+    return Objects.hash(id, title, body, userId);
   }
 
   @Override
@@ -79,7 +78,7 @@ public class Post implements Serializable {
             "id=" + id +
             ", title='" + title + '\'' +
             ", body='" + body + '\'' +
-            ", comments=" + comments +
+            ", userId=" + userId +
             '}';
   }
 }

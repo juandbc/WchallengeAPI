@@ -14,14 +14,16 @@ public class Comment implements Serializable {
   private String name;
   private String email;
   private String body;
+  private  int postId;
 
   public Comment() {}
 
-  public Comment(int id, String name, String email, String body) {
+  public Comment(int id, String name, String email, String body, int postId) {
     this.id = id;
     this.name = name;
     this.email = email;
     this.body = body;
+    this.postId = postId;
   }
 
   public int getId() {
@@ -56,12 +58,21 @@ public class Comment implements Serializable {
     this.body = body;
   }
 
+  public int getPostId() {
+    return postId;
+  }
+
+  public void setPostId(int postId) {
+    this.postId = postId;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Comment comment = (Comment) o;
     return id == comment.id &&
+            postId == comment.postId &&
             name.equals(comment.name) &&
             email.equals(comment.email) &&
             body.equals(comment.body);
@@ -69,7 +80,7 @@ public class Comment implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, email, body);
+    return Objects.hash(id, name, email, body, postId);
   }
 
   @Override
@@ -79,6 +90,7 @@ public class Comment implements Serializable {
             ", name='" + name + '\'' +
             ", email='" + email + '\'' +
             ", body='" + body + '\'' +
+            ", postId=" + postId +
             '}';
   }
 }
