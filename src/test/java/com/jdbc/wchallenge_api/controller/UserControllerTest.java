@@ -18,10 +18,11 @@ class UserControllerTest {
   private int port;
 
   private WebTestClient webTestClient;
+  private static final String PATH = "/api/v1/users/";
 
   @BeforeEach
   void setUp() {
-    String baseUrl = "http://localhost:" + port + "/api/v1";
+    String baseUrl = "http://localhost:" + port + PATH;
     webTestClient = WebTestClient.bindToServer().baseUrl(baseUrl)
             .codecs(clientCodecConfigurer -> clientCodecConfigurer.defaultCodecs()
                     .maxInMemorySize(10 * 1024 * 1024))
@@ -30,7 +31,7 @@ class UserControllerTest {
 
   @Test
   void findAllUsers() {
-    webTestClient.get().uri("/users").accept(MediaType.APPLICATION_JSON)
+    webTestClient.get().accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectBody()
@@ -40,7 +41,7 @@ class UserControllerTest {
 
   @Test
   void findUserById() {
-    webTestClient.get().uri("/users/5").accept(MediaType.APPLICATION_JSON)
+    webTestClient.get().uri("5").accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectBody()
@@ -50,7 +51,7 @@ class UserControllerTest {
 
   @Test
   void findUserComments() {
-    webTestClient.get().uri("/users/5/comments").accept(MediaType.APPLICATION_JSON)
+    webTestClient.get().uri("5/comments").accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectBody()
@@ -60,8 +61,19 @@ class UserControllerTest {
   }
 
   @Test
+  void findUserAlbums() {
+    webTestClient.get().uri("2/albums").accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody()
+            .jsonPath("$[4].id").isEqualTo(15)
+            .jsonPath("$[4].userId").isEqualTo(2)
+            .jsonPath("$[4].title").isEqualTo("ut pariatur rerum ipsum natus repellendus praesentium");
+  }
+
+  @Test
   void findUserPhotos() {
-    webTestClient.get().uri("/users/2/photos").accept(MediaType.APPLICATION_JSON)
+    webTestClient.get().uri("2/photos").accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
@@ -69,5 +81,64 @@ class UserControllerTest {
             .jsonPath("$[5].id").isEqualTo(506)
             .jsonPath("$[5].albumId").isEqualTo(11)
             .jsonPath("$[5].title").isEqualTo("maxime unde repudiandae similique reiciendis harum");
+  }
+
+  @Test
+  void userNotFoundById() {
+    webTestClient.get().uri("0").accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isNotFound();
+  }
+
+  @Test
+  void userCommentsNotFound() {
+    webTestClient.get().uri("0/comments").accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody().json("[]");
+  }
+
+  @Test
+  void userAlbumsNotFound() {
+    webTestClient.get().uri("0/albums").accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody().json("[]");
+  }
+
+  @Test
+  void usersPhotosNotFound() {
+    webTestClient.get().uri("0/photos").accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody().json("[]");
+  }
+
+  @Test
+  void getBadRequestWhenFindUserWithBadId() {
+    webTestClient.get().uri("s").accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isBadRequest();
+  }
+
+  @Test
+  void getBadRequestWhenFindUserCommentsWithBadId() {
+    webTestClient.get().uri("s/comments").accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isBadRequest();
+  }
+
+  @Test
+  void getBadRequestWhenFindUserAlbumsWithBadId() {
+    webTestClient.get().uri("s/albums").accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isBadRequest();
+  }
+
+  @Test
+  void getBadRequestWhenFindUserPhotosWithBadId() {
+    webTestClient.get().uri("s/photos").accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isBadRequest();
   }
 }

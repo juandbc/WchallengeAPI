@@ -18,16 +18,17 @@ class AlbumControllerTest {
   private int port;
 
   private WebTestClient webTestClient;
+  private static final String PATH = "/api/v1/albums/";
 
   @BeforeEach
   void setUp() {
-    String baseUrl = "http://localhost:" + port + "/api/v1";
+    String baseUrl = "http://localhost:" + port + PATH;
     webTestClient = WebTestClient.bindToServer().baseUrl(baseUrl).build();
   }
 
   @Test
   void findAllUsers() {
-    webTestClient.get().uri("/albums").accept(MediaType.APPLICATION_JSON)
+    webTestClient.get().accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectBody()
@@ -36,10 +37,24 @@ class AlbumControllerTest {
 
   @Test
   void findUserById() {
-    webTestClient.get().uri("/albums/9").accept(MediaType.APPLICATION_JSON)
+    webTestClient.get().uri("9").accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectBody()
             .jsonPath("$.title").isEqualTo("saepe unde necessitatibus rem");
+  }
+
+  @Test
+  void albumNotFoundById() {
+    webTestClient.get().uri("0").accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isNotFound();
+  }
+
+  @Test
+  void getBadRequestWhenFindAlbumWithBadId() {
+    webTestClient.get().uri("s").accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isBadRequest();
   }
 }

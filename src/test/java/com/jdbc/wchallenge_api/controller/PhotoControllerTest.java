@@ -19,9 +19,11 @@ class PhotoControllerTest {
 
   private WebTestClient webTestClient;
 
+  private static final String PATH = "/api/v1/photos/";
+
   @BeforeEach
   void setUp() {
-    String baseUrl = "http://localhost:" + port + "/api/v1";
+    String baseUrl = "http://localhost:" + port + PATH;
     webTestClient = WebTestClient.bindToServer().baseUrl(baseUrl)
             .codecs(clientCodecConfigurer -> clientCodecConfigurer.defaultCodecs()
                     .maxInMemorySize(10 * 1024 * 1024))
@@ -30,7 +32,7 @@ class PhotoControllerTest {
 
   @Test
   void findAllPhotos() {
-    webTestClient.get().uri("/photos").accept(MediaType.APPLICATION_JSON)
+    webTestClient.get().accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectBody()
@@ -39,11 +41,27 @@ class PhotoControllerTest {
 
   @Test
   void findPhotoById() {
-    webTestClient.get().uri("/photos/15").accept(MediaType.APPLICATION_JSON)
+    webTestClient.get().uri("15").accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectBody()
-            .jsonPath("$.id").isEqualTo( 15)
-            .jsonPath("$.thumbnailUrl").isEqualTo( "https://via.placeholder.com/150/f9cee5");
+            .jsonPath("$.id").isEqualTo(15)
+            .jsonPath("$.thumbnailUrl").isEqualTo("https://via.placeholder.com/150/f9cee5");
+  }
+
+  @Test
+  void photosNotFound() {
+    webTestClient.get().uri("0").accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectStatus().isOk()
+            .expectBody().json("[]");
+  }
+
+  @Test
+  void getBadRequestWithBadId() {
+    webTestClient.get().uri("s").accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isBadRequest();
   }
 }

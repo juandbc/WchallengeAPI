@@ -19,17 +19,20 @@ class CommentControllerTest {
 
   private WebTestClient webTestClient;
 
+  private static final String PATH = "/api/v1/comments/";
+
   @BeforeEach
   void setUp() {
-    String baseUrl = "http://localhost:" + port + "/api/v1";
+    String baseUrl = "http://localhost:" + port + PATH;
     webTestClient = WebTestClient.bindToServer().baseUrl(baseUrl).build();
   }
 
   @Test
   void findAllComments() {
-    webTestClient.get().uri("/comments").accept(MediaType.APPLICATION_JSON)
+    webTestClient.get().accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$[*].name").exists()
             .jsonPath("$[*].body").exists()
@@ -38,11 +41,49 @@ class CommentControllerTest {
 
   @Test
   void findCommentById() {
-    webTestClient.get().uri("/comments/5").accept(MediaType.APPLICATION_JSON)
+    webTestClient.get().uri("5").accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
-            .jsonPath("$.postId").isEqualTo( 1)
+            .jsonPath("$.postId").isEqualTo(1)
             .jsonPath("$.email").isEqualTo("Hayden@althea.biz");
+  }
+
+  @Test
+  void findCommentByName() {
+    webTestClient.get().uri("?name=id labore ex et quam laborum").accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectBody()
+            .jsonPath("$[0].postId").isEqualTo(1)
+            .jsonPath("$[0].email").isEqualTo("Eliseo@gardner.biz");
+  }
+
+  @Test
+  void commentNotFoundById() {
+    webTestClient.get().uri("0").accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectBody().json("{}");
+  }
+
+  @Test
+  void commentNotFoundByName() {
+    webTestClient.get().uri("?name=hola").accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectBody().json("[]");
+  }
+
+  @Test
+  void getBadRequestBadId() {
+    webTestClient.get().uri("s").accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectStatus().isBadRequest();
   }
 }
