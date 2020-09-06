@@ -1,5 +1,8 @@
 package com.jdbc.wchallenge_api.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -7,15 +10,19 @@ import java.util.Objects;
  * @author Juan David Bermudez
  * @version 1.0
  */
+@Document(collection = "post")
 public class Post implements Serializable {
 
   private static final long serialVersionUID = 277641656384450461L;
+
+  @Id
   private int id;
   private String title;
   private String body;
   private int userId;
 
-  public Post() {}
+  public Post() {
+  }
 
   public Post(int id, String title, String body, int userId) {
     this.id = id;

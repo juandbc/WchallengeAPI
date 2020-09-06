@@ -1,5 +1,9 @@
 package com.jdbc.wchallenge_api.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -7,9 +11,12 @@ import java.util.Objects;
  * @author Juan David Bermudez
  * @version 1.0
  */
+@Document(collection = "user")
 public class User implements Serializable {
 
   private static final long serialVersionUID = -33943447440291629L;
+
+  @Id
   private int id;
   private String name;
   private String username;
@@ -19,15 +26,18 @@ public class User implements Serializable {
   private String website;
   private Company company;
 
-  public User() {}
+  public User() {
+  }
 
-  public User(int id, String name, String username, String email, String phone, String website) {
+  public User(int id, String name, String username, String email, Address address, String phone, String website, Company company) {
     this.id = id;
     this.name = name;
     this.username = username;
     this.email = email;
+    this.address = address;
     this.phone = phone;
     this.website = website;
+    this.company = company;
   }
 
   public int getId() {
@@ -139,6 +149,7 @@ public class User implements Serializable {
 
     public Address() {}
 
+    @PersistenceConstructor
     public Address(String street, String suite, String city, String zipcode) {
       this.street = street;
       this.suite = suite;
@@ -220,6 +231,7 @@ public class User implements Serializable {
 
       public Geo() {}
 
+      @PersistenceConstructor
       public Geo(String lat, String lng) {
         this.lat = lat;
         this.lng = lng;
@@ -260,6 +272,7 @@ public class User implements Serializable {
 
     public Company() {}
 
+    @PersistenceConstructor
     public Company(String name, String catchPhrase, String bs) {
       this.name = name;
       this.catchPhrase = catchPhrase;

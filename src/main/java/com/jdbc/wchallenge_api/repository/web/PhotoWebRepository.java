@@ -1,4 +1,4 @@
-package com.jdbc.wchallenge_api.repository;
+package com.jdbc.wchallenge_api.repository.web;
 
 import com.jdbc.wchallenge_api.model.Photo;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +14,7 @@ import java.util.List;
  * @version 1.0
  */
 @Repository
-public class PhotoWebRepository extends WebRepository implements PhotoRepository {
+public class PhotoWebRepository implements WebRepository<Photo> {
 
   private final WebClient webClient;
 
@@ -24,13 +24,13 @@ public class PhotoWebRepository extends WebRepository implements PhotoRepository
 
   @Override
   public List<Photo> findAll() {
-    Flux<Photo> result = (Flux<Photo>) getFlux(webClient, "", Photo.class);
+    Flux<Photo> result = getFlux(webClient, "", Photo.class);
     return result.collectList().block();
   }
 
   @Override
   public Photo findById(int id) {
-    Mono<Photo> result = (Mono<Photo>) getMono(webClient, String.format("/%s", id), Photo.class);
+    Mono<Photo> result = getMono(webClient, String.format("/%s", id), Photo.class);
     return result.block();
   }
 }

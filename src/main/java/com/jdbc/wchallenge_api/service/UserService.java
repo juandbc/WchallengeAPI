@@ -1,14 +1,14 @@
 package com.jdbc.wchallenge_api.service;
 
-import com.jdbc.wchallenge_api.model.*;
-import com.jdbc.wchallenge_api.repository.UserRepository;
-import com.jdbc.wchallenge_api.repository.UserWebRepository;
+import com.jdbc.wchallenge_api.model.User;
+import com.jdbc.wchallenge_api.repository.db.UserDbRepository;
+import com.jdbc.wchallenge_api.repository.web.UserWebRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 /**
  * @author Juan David Bermudez
@@ -17,54 +17,25 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
-  private final UserRepository userRepository;
-
-  private final AlbumService albumService;
-  private final PostService postService;
-  private final CommentService commentService;
-  private final PhotoService photoService;
+  private final UserWebRepository userWebRepository;
+  private final UserDbRepository userDbRepository;
 
   @Autowired
-  public UserService(UserWebRepository userRepository, AlbumService albumService, PostService postService, CommentService commentService, PhotoService photoService) {
-    this.userRepository = userRepository;
-    this.albumService = albumService;
-    this.postService = postService;
-    this.commentService = commentService;
-    this.photoService = photoService;
+  public UserService(UserWebRepository userRepository, UserDbRepository userDbRepository) {
+    this.userWebRepository = userRepository;
+    this.userDbRepository = userDbRepository;
   }
 
   public List<User> findAll() {
-    return userRepository.findAll();
+    List<User> users = new ArrayList<>();
+    users.addAll(userWebRepository.findAll());
+    users.addAll(userDbRepository.findAll());
+    return users;
   }
 
   public User findById(int id) {
-    return userRepository.findById(id);
-  }
+    Optional<User> optionalUser = userDbRepository.findById(id);
 
-  public List<Comment> findUserComments(int id) {
-    List<Comment> userComments = new ArrayList<>();
-    List<Post> userPosts = postService.findByUser(id);
-
-    userPosts.forEach(post ->
-            userComments.addAll(commentService.findAll()
-                    .stream()
-                    .filter(comment -> comment.getPostId() == post.getId())
-                    .collect(Collectors.toList()))
-    );
-
-    return userComments;
-  }
-
-  public List<Photo> findUserPhotos(int id) {
-    List<Photo> userPhotos = new ArrayList<>();
-    List<Album> userAlbums = albumService.findByUser(id);
-
-    userAlbums.forEach(album ->
-            userPhotos.addAll(photoService.findAll()
-                    .stream()
-                    .filter(photo -> photo.getAlbumId() == album.getId())
-                    .collect(Collectors.toList()))
-    );
-    return userPhotos;
+    return optionalUser.orElse(userWebRepository.findById(id));
   }
 }

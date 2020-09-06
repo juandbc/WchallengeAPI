@@ -1,13 +1,11 @@
 package com.jdbc.wchallenge_api.service;
 
 import com.jdbc.wchallenge_api.model.Post;
-import com.jdbc.wchallenge_api.repository.PostWebRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
@@ -20,8 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @version 1.0
  */
 @ExtendWith(SpringExtension.class)
-@TestPropertySource("classpath:application.properties")
-@ContextConfiguration(classes = {PostService.class, PostWebRepository.class})
+@SpringBootTest
 class PostServiceTest {
 
   @Autowired

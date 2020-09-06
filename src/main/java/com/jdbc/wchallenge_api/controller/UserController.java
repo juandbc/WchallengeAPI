@@ -5,6 +5,8 @@ import com.jdbc.wchallenge_api.model.Comment;
 import com.jdbc.wchallenge_api.model.Photo;
 import com.jdbc.wchallenge_api.model.User;
 import com.jdbc.wchallenge_api.service.AlbumService;
+import com.jdbc.wchallenge_api.service.CommentService;
+import com.jdbc.wchallenge_api.service.PhotoService;
 import com.jdbc.wchallenge_api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -25,11 +27,15 @@ public class UserController {
 
   private final AlbumService albumService;
   private final UserService userService;
+  private final PhotoService photoService;
+  private final CommentService commentService;
 
   @Autowired
-  public UserController(AlbumService albumService, UserService userService) {
+  public UserController(AlbumService albumService, UserService userService, PhotoService photoService, CommentService commentService) {
     this.albumService = albumService;
     this.userService = userService;
+    this.photoService = photoService;
+    this.commentService = commentService;
   }
 
   @GetMapping
@@ -49,11 +55,11 @@ public class UserController {
 
   @GetMapping("/{id}/comments")
   public List<Comment> findUserComments(@PathVariable int id) {
-    return userService.findUserComments(id);
+    return commentService.findCommentsByUser(id);
   }
 
   @GetMapping("/{id}/photos")
   public List<Photo> findUserPhotos(@PathVariable int id) {
-    return userService.findUserPhotos(id);
+    return photoService.findByUser(id);
   }
 }

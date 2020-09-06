@@ -1,5 +1,6 @@
 package com.jdbc.wchallenge_api.repository;
 
+import com.jdbc.wchallenge_api.repository.web.PhotoWebRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

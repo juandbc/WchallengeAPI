@@ -1,4 +1,4 @@
-package com.jdbc.wchallenge_api.repository;
+package com.jdbc.wchallenge_api.repository.web;
 
 import com.jdbc.wchallenge_api.model.Post;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +14,7 @@ import java.util.List;
  * @version 1.0
  */
 @Repository
-public class PostWebRepository extends WebRepository implements PostRepository {
+public class PostWebRepository implements WebRepository<Post> {
 
   private final WebClient webClient;
 
@@ -24,20 +24,19 @@ public class PostWebRepository extends WebRepository implements PostRepository {
 
   @Override
   public List<Post> findAll() {
-    Flux<Post> result = (Flux<Post>) getFlux(webClient, "", Post.class);
+    Flux<Post> result = getFlux(webClient, "", Post.class);
     return result.collectList().block();
   }
 
   @Override
   public Post findById(int id) {
-    Mono<Post> result = (Mono<Post>) getMono(webClient, String.format("/%s", id), Post.class);
+    Mono<Post> result = getMono(webClient, String.format("/%s", id), Post.class);
     return result.block();
   }
 
-  @Override
   public List<Post> findByUser(int userId) {
     String uriPath = String.format("?userId=%d", userId);
-    Flux<Post> result = (Flux<Post>) getFlux(webClient, uriPath, Post.class);
+    Flux<Post> result = getFlux(webClient, uriPath, Post.class);
     return result.collectList().block();
   }
 }

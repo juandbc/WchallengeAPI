@@ -48,7 +48,9 @@ class AlbumControllerTest {
   void albumNotFoundById() {
     webTestClient.get().uri("0").accept(MediaType.APPLICATION_JSON)
             .exchange()
-            .expectStatus().isNotFound();
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectBody().json("{}");
   }
 
   @Test

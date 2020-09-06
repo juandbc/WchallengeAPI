@@ -50,12 +50,12 @@ class PhotoControllerTest {
   }
 
   @Test
-  void photosNotFound() {
+  void photoNotFound() {
     webTestClient.get().uri("0").accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectStatus().isOk()
-            .expectBody().json("[]");
+            .expectBody().json("{}");
   }
 
   @Test

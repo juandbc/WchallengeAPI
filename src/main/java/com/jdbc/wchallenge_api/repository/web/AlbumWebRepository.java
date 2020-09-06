@@ -1,4 +1,4 @@
-package com.jdbc.wchallenge_api.repository;
+package com.jdbc.wchallenge_api.repository.web;
 
 import com.jdbc.wchallenge_api.model.Album;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +14,7 @@ import java.util.List;
  * @version 1.0
  */
 @Repository
-public class AlbumWebRepository extends WebRepository implements AlbumRepository {
+public class AlbumWebRepository implements WebRepository<Album> {
 
   private final WebClient webClient;
 
@@ -24,21 +24,20 @@ public class AlbumWebRepository extends WebRepository implements AlbumRepository
 
   @Override
   public List<Album> findAll() {
-    Flux<Album> result = (Flux<Album>) getFlux(webClient, "", Album.class);
+    Flux<Album> result = getFlux(webClient, "", Album.class);
     return result.collectList().block();
   }
 
   @Override
   public Album findById(int id) {
-    Mono<Album> result = (Mono<Album>) getMono(webClient, String.format("/%s", id), Album.class);
+    Mono<Album> result = getMono(webClient, String.format("/%s", id), Album.class);
     return result.block();
   }
 
-  @Override
   public List<Album> findByUser(int user) {
     String uriPath = String.format("?userId=%d", user);
 
-    Flux<Album> result = (Flux<Album>) getFlux(webClient, uriPath, Album.class);
+    Flux<Album> result = getFlux(webClient, uriPath, Album.class);
     return result.collectList().block();
   }
 }

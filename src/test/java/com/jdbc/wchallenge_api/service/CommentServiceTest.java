@@ -1,12 +1,10 @@
 package com.jdbc.wchallenge_api.service;
 
 import com.jdbc.wchallenge_api.model.Comment;
-import com.jdbc.wchallenge_api.repository.CommentRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
@@ -18,8 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @version 1.0
  */
 @ExtendWith(SpringExtension.class)
-@TestPropertySource("classpath:application.properties")
-@ContextConfiguration(classes = {CommentService.class, CommentRepository.class})
+@SpringBootTest
 class CommentServiceTest {
 
   @Autowired
@@ -41,5 +38,14 @@ class CommentServiceTest {
     Comment actualComment = commentService.findById(85);
 
     assertThat(actualComment).isNotNull().isEqualToIgnoringNullFields(expectedComment);
+  }
+
+  @Test
+  void findCommentsByUser() {
+    assertThat(this.commentService.findCommentsByUser(5))
+            .isNotNull()
+            .isNotEmpty()
+            .hasOnlyElementsOfType(Comment.class)
+            .hasSizeGreaterThan(49);
   }
 }

@@ -87,7 +87,9 @@ class UserControllerTest {
   void userNotFoundById() {
     webTestClient.get().uri("0").accept(MediaType.APPLICATION_JSON)
             .exchange()
-            .expectStatus().isNotFound();
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectBody().json("{}");
   }
 
   @Test
@@ -95,6 +97,7 @@ class UserControllerTest {
     webTestClient.get().uri("0/comments").accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody().json("[]");
   }
 
@@ -103,6 +106,7 @@ class UserControllerTest {
     webTestClient.get().uri("0/albums").accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody().json("[]");
   }
 
@@ -111,6 +115,7 @@ class UserControllerTest {
     webTestClient.get().uri("0/photos").accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody().json("[]");
   }
 
@@ -118,6 +123,7 @@ class UserControllerTest {
   void getBadRequestWhenFindUserWithBadId() {
     webTestClient.get().uri("s").accept(MediaType.APPLICATION_JSON)
             .exchange()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectStatus().isBadRequest();
   }
 
@@ -125,6 +131,7 @@ class UserControllerTest {
   void getBadRequestWhenFindUserCommentsWithBadId() {
     webTestClient.get().uri("s/comments").accept(MediaType.APPLICATION_JSON)
             .exchange()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectStatus().isBadRequest();
   }
 
@@ -132,6 +139,7 @@ class UserControllerTest {
   void getBadRequestWhenFindUserAlbumsWithBadId() {
     webTestClient.get().uri("s/albums").accept(MediaType.APPLICATION_JSON)
             .exchange()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectStatus().isBadRequest();
   }
 
@@ -139,6 +147,7 @@ class UserControllerTest {
   void getBadRequestWhenFindUserPhotosWithBadId() {
     webTestClient.get().uri("s/photos").accept(MediaType.APPLICATION_JSON)
             .exchange()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectStatus().isBadRequest();
   }
 }

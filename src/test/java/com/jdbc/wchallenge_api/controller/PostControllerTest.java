@@ -65,7 +65,9 @@ class PostControllerTest {
   void postNotFound() {
     webTestClient.get().uri("0").accept(MediaType.APPLICATION_JSON)
             .exchange()
-            .expectStatus().isNotFound();
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectBody().json("{}");
   }
 
   @Test
@@ -73,6 +75,7 @@ class PostControllerTest {
     webTestClient.get().uri("?userId=0").accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody().json("[]");
   }
 

@@ -1,4 +1,4 @@
-package com.jdbc.wchallenge_api.repository;
+package com.jdbc.wchallenge_api.repository.web;
 
 import com.jdbc.wchallenge_api.model.User;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +14,7 @@ import java.util.List;
  * @version 1.0
  */
 @Repository
-public class UserWebRepository extends WebRepository implements UserRepository {
+public class UserWebRepository implements WebRepository<User> {
 
   private final WebClient webClient;
 
@@ -24,13 +24,13 @@ public class UserWebRepository extends WebRepository implements UserRepository {
 
   @Override
   public List<User> findAll() {
-    Flux<User> result = (Flux<User>) getFlux(webClient, "", User.class);
+    Flux<User> result = getFlux(webClient, "", User.class);
     return result.collectList().block();
   }
 
   @Override
   public User findById(int id) {
-    Mono<User> result = (Mono<User>) getMono(webClient, String.format("/%s", id), User.class);
+    Mono<User> result = getMono(webClient, String.format("/%s", id), User.class);
     return result.block();
   }
 }

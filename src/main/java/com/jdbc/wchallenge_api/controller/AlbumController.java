@@ -3,7 +3,6 @@ package com.jdbc.wchallenge_api.controller;
 import com.jdbc.wchallenge_api.model.Album;
 import com.jdbc.wchallenge_api.service.AlbumService;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,22 +27,12 @@ public class AlbumController {
   }
 
   @GetMapping(params = {"userId"})
-  public ResponseEntity<List<Album>> findByUser(@RequestParam int userId) {
-    List<Album> body = albumService.findByUser(userId);
-
-    if (body.isEmpty())
-      return ResponseEntity.notFound().build();
-    else
-      return ResponseEntity.ok(body);
+  public List<Album> findByUser(@RequestParam int userId) {
+    return albumService.findByUser(userId);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Album> findById(@PathVariable int id) {
-    Album album = albumService.findById(id);
-
-    if (album.getTitle() == null)
-      return ResponseEntity.notFound().build();
-    else
-      return ResponseEntity.ok(album);
+  public Album findById(@PathVariable int id) {
+    return albumService.findById(id);
   }
 }

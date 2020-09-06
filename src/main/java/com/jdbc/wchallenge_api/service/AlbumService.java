@@ -1,12 +1,14 @@
 package com.jdbc.wchallenge_api.service;
 
 import com.jdbc.wchallenge_api.model.Album;
-import com.jdbc.wchallenge_api.repository.AlbumRepository;
-import com.jdbc.wchallenge_api.repository.AlbumWebRepository;
+import com.jdbc.wchallenge_api.repository.db.AlbumDbRepository;
+import com.jdbc.wchallenge_api.repository.web.AlbumWebRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Juan David Bermudez
@@ -15,22 +17,36 @@ import java.util.List;
 @Service
 public class AlbumService {
 
-  private final AlbumRepository albumRepository;
+  private final AlbumDbRepository albumDbRepository;
+  private final AlbumWebRepository albumWebRepository;
 
   @Autowired
-  public AlbumService(AlbumWebRepository albumRepository) {
-    this.albumRepository = albumRepository;
+  public AlbumService(AlbumWebRepository albumWebRepository, AlbumDbRepository albumDbRepository) {
+    this.albumDbRepository = albumDbRepository;
+    this.albumWebRepository = albumWebRepository;
   }
 
   public List<Album> findAll() {
-    return albumRepository.findAll();
+    List<Album> albums = new ArrayList<>();
+
+    albums.addAll(albumWebRepository.findAll());
+    albums.addAll(albumDbRepository.findAll());
+
+    return albums;
   }
 
   public Album findById(int id) {
-    return albumRepository.findById(id);
+    Optional<Album> optionalAlbum = albumDbRepository.findById(id);
+
+    return optionalAlbum.orElseGet(() -> albumWebRepository.findById(id));
   }
 
-  public List<Album> findByUser(int user) {
-    return albumRepository.findByUser(user);
+  public List<Album> findByUser(int userId) {
+    List<Album> albums = new ArrayList<>();
+
+    albums.addAll(albumWebRepository.findByUser(userId));
+    albums.addAll(albumDbRepository.findByUser(userId));
+
+    return albums;
   }
 }
