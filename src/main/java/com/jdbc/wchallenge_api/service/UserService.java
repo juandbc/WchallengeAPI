@@ -19,18 +19,18 @@ public class UserService {
 
   private final UserRepository userRepository;
 
-  @Autowired
-  private AlbumService albumService;
-  @Autowired
-  private PostService postService;
-  @Autowired
-  private CommentService commentService;
-  @Autowired
-  private PhotoService photoService;
+  private final AlbumService albumService;
+  private final PostService postService;
+  private final CommentService commentService;
+  private final PhotoService photoService;
 
   @Autowired
-  public UserService(UserWebRepository userRepository) {
+  public UserService(UserWebRepository userRepository, AlbumService albumService, PostService postService, CommentService commentService, PhotoService photoService) {
     this.userRepository = userRepository;
+    this.albumService = albumService;
+    this.postService = postService;
+    this.commentService = commentService;
+    this.photoService = photoService;
   }
 
   public List<User> findAll() {

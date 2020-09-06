@@ -16,32 +16,26 @@ import java.util.List;
  * @version 1.0
  */
 @Repository
-public class CommentRepository {
+public class CommentRepository extends WebRepository {
 
   private final WebClient webClient;
 
-  private static final String PATH = "/comments";
-
-  public CommentRepository(@Value("${webServiceRepository}") String baseUrl) {
-    this.webClient = WebClient.create(baseUrl);
+  public CommentRepository(@Value("${webServiceRepository}") String baseUrl, @Value("${commentsPath}") String path) {
+    this.webClient = WebClient.create(baseUrl + path);
   }
 
   public List<Comment> findAll() {
-    Flux<Comment> result = webClient.get().uri(PATH).header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-            .retrieve()
-            .bodyToFlux(Comment.class);
+    Flux<Comment> result = (Flux<Comment>) getFlux(webClient, "", Comment.class);
     return result.collectList().block();
   }
 
   public Comment findById(int id) {
-    Mono<Comment> result = webClient.get().uri(PATH + "/{id}", id)
-            .retrieve()
-            .bodyToMono(Comment.class);
+    Mono<Comment> result = (Mono<Comment>) getMono(webClient, String.format("/%s", id), Comment.class);
     return result.block();
   }
 
   public List<Comment> findByName(String name) {
-    String uriPath = String.format("%s?name=%s", PATH, name);
+    String uriPath = String.format("?name=%s", name);
 
     Flux<Comment> result = webClient.get().uri(uriPath).header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
             .retrieve()

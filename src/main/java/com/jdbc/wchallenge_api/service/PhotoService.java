@@ -14,8 +14,12 @@ import java.util.List;
 @Service
 public class PhotoService {
 
+  private final PhotoRepository photoRepository;
+
   @Autowired
-  private PhotoRepository photoRepository;
+  public PhotoService(PhotoRepository photoRepository) {
+    this.photoRepository = photoRepository;
+  }
 
   public List<Photo> findAll() {
     return photoRepository.findAll();

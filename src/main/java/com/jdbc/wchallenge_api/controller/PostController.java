@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,8 +16,12 @@ import java.util.List;
 @RequestMapping(value = "/posts", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PostController {
 
+  private final PostService postService;
+
   @Autowired
-  private PostService postService;
+  public PostController(PostService postService) {
+    this.postService = postService;
+  }
 
   @GetMapping
   public List<Post> findAll() {
@@ -26,15 +29,12 @@ public class PostController {
   }
 
   @GetMapping("/{id}")
-  public Post findById(@PathVariable String id) {
-    return postService.findById(Integer.parseInt(id));
+  public Post findById(@PathVariable int id) {
+    return postService.findById(id);
   }
 
   @GetMapping(params = {"userId"})
-  public List<Post> findByUser(@RequestParam String userId) {
-    if (userId != null && !userId.isEmpty())
-      return postService.findByUser(Integer.parseInt(userId));
-    else
-      return Collections.emptyList();
+  public List<Post> findByUser(@RequestParam int userId) {
+    return postService.findByUser(userId);
   }
 }

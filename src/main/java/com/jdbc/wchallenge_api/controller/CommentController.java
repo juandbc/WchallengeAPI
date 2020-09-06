@@ -3,6 +3,7 @@ package com.jdbc.wchallenge_api.controller;
 import com.jdbc.wchallenge_api.model.Comment;
 import com.jdbc.wchallenge_api.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -13,11 +14,15 @@ import java.util.List;
  * @version 1.0
  */
 @RestController
-@RequestMapping("/comments")
+@RequestMapping(value = "/comments", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CommentController {
 
+  private final CommentService commentService;
+
   @Autowired
-  private CommentService commentService;
+  public CommentController(CommentService commentService) {
+    this.commentService = commentService;
+  }
 
   @GetMapping
   public List<Comment> findAll() {
@@ -25,20 +30,12 @@ public class CommentController {
   }
 
   @GetMapping(params = "name")
-  public List<Comment> findsByName(@RequestParam(required = false) String name) {
+  public List<Comment> findsByName(@RequestParam String name) {
     if (name != null && !name.isEmpty())
       return commentService.findByName(name);
     else
       return Collections.emptyList();
   }
-
-//  @GetMapping(params = "postId")
-//  public List<Comment> findByPost(@RequestParam(required = false) String postId) {
-//    if (postId != null && !postId.isEmpty())
-//      return commentService.findByPost(Integer.parseInt(postId));
-//    else
-//      return Collections.emptyList();
-//  }
 
   @GetMapping("/{id}")
   public Comment findById(@PathVariable int id) {

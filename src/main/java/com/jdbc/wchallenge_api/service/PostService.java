@@ -14,8 +14,12 @@ import java.util.List;
 @Service
 public class PostService {
 
+  private final PostWebRepository postRepository;
+
   @Autowired
-  private PostWebRepository postRepository;
+  public PostService(PostWebRepository postRepository) {
+    this.postRepository = postRepository;
+  }
 
   public List<Post> findAll() {
     return postRepository.findAll();
