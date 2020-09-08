@@ -44,4 +44,12 @@ public class PostService {
   public List<Post> findByUser(int userId) {
     return postRepository.findByUser(userId);
   }
+
+  public void insert(Post post) {
+    postDbRepository.insert(post);
+  }
+
+  public void update(Post post) {
+    postDbRepository.save(post);
+  }
 }

@@ -1,5 +1,7 @@
 package com.jdbc.wchallenge_api.model;
 
+import org.springframework.data.annotation.Transient;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -11,13 +13,17 @@ public class Comment implements Serializable {
 
   private static final long serialVersionUID = 1990586977481539117L;
 
+  @Transient
+  public static final String SEQUENCE_NAME = "comment_sequence";
+
   private int id;
   private String name;
   private String email;
   private String body;
-  private  int postId;
+  private int postId;
 
-  public Comment() {}
+  public Comment() {
+  }
 
   public Comment(int id, String name, String email, String body, int postId) {
     this.id = id;

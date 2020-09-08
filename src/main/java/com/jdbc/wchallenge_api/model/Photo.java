@@ -1,6 +1,7 @@
 package com.jdbc.wchallenge_api.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -14,6 +15,9 @@ import java.util.Objects;
 public class Photo implements Serializable {
 
   private static final long serialVersionUID = -8653743686656633868L;
+
+  @Transient
+  public static final String SEQUENCE_NAME = "photo_sequence";
 
   @Id
   private int id;

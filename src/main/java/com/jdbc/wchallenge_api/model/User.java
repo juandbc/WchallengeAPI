@@ -2,6 +2,7 @@ package com.jdbc.wchallenge_api.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -16,8 +17,12 @@ public class User implements Serializable {
 
   private static final long serialVersionUID = -33943447440291629L;
 
+  @Transient
+  public static final String SEQUENCE_NAME = "user_sequence";
+
   @Id
   private int id;
+
   private String name;
   private String username;
   private String email;

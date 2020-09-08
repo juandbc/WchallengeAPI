@@ -67,4 +67,12 @@ public class CommentService {
 
     return userComments;
   }
+
+  public void insert(Comment comment) {
+    commentDbRepository.insert(comment);
+  }
+
+  public void update(Comment comment) {
+    commentDbRepository.save(comment);
+  }
 }

@@ -9,11 +9,11 @@ import com.jdbc.wchallenge_api.service.CommentService;
 import com.jdbc.wchallenge_api.service.PhotoService;
 import com.jdbc.wchallenge_api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,8 +43,9 @@ public class UserController {
     return userService.findAll();
   }
 
+
   @GetMapping("/{id}")
-  public User findById(@PathVariable int id) {
+  public User findById(@PathVariable(name = "id") int id) {
     return userService.findById(id);
   }
 
@@ -61,5 +62,29 @@ public class UserController {
   @GetMapping("/{id}/photos")
   public List<Photo> findUserPhotos(@PathVariable int id) {
     return photoService.findByUser(id);
+  }
+
+  @GetMapping(value = "/albums/{albumId}", params = "permission")
+  public List<User> findUsersByAlbumPermission(@PathVariable int albumId, @RequestParam String permission) {
+    return userService.findUsersByAlbumPermission(albumId, permission);
+  }
+
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public void insertUser(@RequestBody User user) {
+    userService.insert(user);
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<Void> updateUser(@PathVariable int id, @RequestBody @Validated User user) {
+    User u = userService.findById(id);
+
+    if (u.getId() != 0) {
+      userService.update(user);
+      return ResponseEntity.noContent().build();
+    } else {
+      userService.insert(user);
+      return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
   }
 }

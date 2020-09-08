@@ -3,7 +3,9 @@ package com.jdbc.wchallenge_api.controller;
 import com.jdbc.wchallenge_api.model.Post;
 import com.jdbc.wchallenge_api.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,5 +38,24 @@ public class PostController {
   @GetMapping(params = {"userId"})
   public List<Post> findByUser(@RequestParam int userId) {
     return postService.findByUser(userId);
+  }
+
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public void insertPost(@RequestBody Post post) {
+    postService.insert(post);
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<Void> updatePost(@PathVariable int id, @RequestBody Post post) {
+    Post u = postService.findById(id);
+
+    if (u.getId() != 0) {
+      postService.update(post);
+      return ResponseEntity.noContent().build();
+    } else {
+      postService.insert(post);
+      return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
   }
 }

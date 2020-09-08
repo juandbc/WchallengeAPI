@@ -49,4 +49,12 @@ public class AlbumService {
 
     return albums;
   }
+
+  public void insert(Album album) {
+    albumDbRepository.insert(album);
+  }
+
+  public void update(Album album) {
+    albumDbRepository.save(album);
+  }
 }

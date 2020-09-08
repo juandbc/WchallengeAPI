@@ -75,4 +75,12 @@ public class PhotoService {
 
     return photos;
   }
+
+  public void insert(Photo photo) {
+    photoDbRepository.insert(photo);
+  }
+
+  public void update(Photo photo) {
+    photoDbRepository.save(photo);
+  }
 }
