@@ -1,11 +1,13 @@
 package com.jdbc.wchallenge_api.controller;
 
+import com.jdbc.wchallenge_api.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Mono;
 
 /**
  * @author Juan David Bermudez
@@ -149,5 +151,24 @@ class UserControllerTest {
             .exchange()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectStatus().isBadRequest();
+  }
+
+  @Test
+  void inserOneUser() {
+    User user = new User();
+    user.setId(1);
+    user.setName("Prueba 1");
+    user.setUsername("Probando");
+    user.setEmail("example@example.com");
+    user.setPhone("1111111");
+    user.setWebsite("example.com");
+    user.setAddress(user.new Address("calle 4", "35", "Medellín", "023697"));
+    user.setCompany(user.new Company("contoso", "contoso", "Better software"));
+
+    webTestClient.post()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(Mono.just(user), User.class)
+            .exchange()
+            .expectStatus().isCreated();
   }
 }

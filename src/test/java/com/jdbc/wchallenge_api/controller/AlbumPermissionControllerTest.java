@@ -1,7 +1,6 @@
 package com.jdbc.wchallenge_api.controller;
 
 import com.jdbc.wchallenge_api.model.AlbumPermission;
-import com.jdbc.wchallenge_api.model.User;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -71,24 +70,5 @@ class AlbumPermissionControllerTest {
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectStatus().isOk()
             .expectBodyList(AlbumPermission.class);
-  }
-
-  @Test
-  void inserOneUser() {
-    User user = new User();
-    user.setId(1);
-    user.setName("Prueba 1");
-    user.setUsername("Probando");
-    user.setEmail("example@example.com");
-    user.setPhone("1111111");
-    user.setWebsite("example.com");
-    user.setAddress(user.new Address("calle 4", "35", "Medellín", "023697"));
-    user.setCompany(user.new Company("contoso", "contoso", "Better software"));
-
-    webTestClient.post()
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(Mono.just(user), User.class)
-            .exchange()
-            .expectStatus().isCreated();
   }
 }
